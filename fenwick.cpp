@@ -81,7 +81,8 @@ int *constructBITree(int arr[], int n)
 int main()
 {
 	int freq[] = {2, 1, 1, 3, 2, 3, 4, 5, 6, 7, 8, 9};
-	int n = sizeof(freq)/sizeof(freq[0])Moveint *BITree = constructBITree(freq, n);
+	int n = sizeof(freq)/sizeof(freq[0]);
+	int *BITree = constructBITree(freq, n);
 	cout << "Sum of elements in arr[0..5] is "
 		<< getSum(BITree, 5);
 	
@@ -89,8 +90,8 @@ int main()
 	freq[3] += 6;
 	updateBIT(BITree, n, 3, 6); // update BIT for above change in arr[]
 	
-	cout << "\nSumof elements in arr[0..5] after update is ";
-		<< getSum(BITree, 5);
+	cout << "\nSumof elements in arr[0..5] after update is "
+		<< getSum(BITree, 5) << endl;
 
 	return 0;
 }
