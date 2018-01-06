@@ -243,4 +243,8 @@ bigint bigint::operator* (const bigint& test) {
 	return ans;	
 }
 
+//YOU CAN IMPLEMENT KARATSUBA ALGORITHM although I don't know if there would be advantages for my implementation
+
 //TESTING REQUIRED
+
+//notes: fix print (add 0's)
