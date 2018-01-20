@@ -11,46 +11,45 @@ using namespace std;
 int BASE = 65536; 
 
 class bigint {
+
 public:
 
 vector<int> digits;
 int sign;
 int length;
 
-bigint();
+bigint(void);
 bigint(int nr);
+bigint(const bigint & obj) ;
+~bigint();
 
-void printB(void);
-bigint symmB(void) const;
-bigint absB(void) const;
-bool operator== (const bigint&);
-bool isbiggerabsB (const bigint&) const;
-bool operator< (const bigint&);
-bool operator> (const bigint&);
-bigint sumabsB (const bigint&) const;
-bigint diffabsB (const bigint&) const;
-bigint operator+ (const bigint&);
-bigint operator- (const bigint&);
-bigint operator* (const bigint&);
+void operator= (bigint);
+void printB(int);
+bigint symmB(void) ;
+bigint absB(void) ;
+bool operator== ( bigint );
+bool isbiggerabsB ( bigint) ;
+bool operator< ( bigint );
+bool operator> ( bigint );
+bigint sumabsB ( bigint ) ;
+bigint diffabsB ( bigint ) ;
+bigint operator+ ( bigint );
+bigint operator- ( bigint );
+bigint operator* ( bigint );
+
+//TURN int INTO bigint
+//FIX printB for any base
 
 //operations
-
 //plusB 1
-
 //multB 2
-
 //divideB 3
-
 //intB 4
-
 //Bstr 5
-
 
 //don't forget print
 
-
 }; 
-
 
 //zero function
 bigint zeroB(){
@@ -62,18 +61,14 @@ bigint zeroB(){
 	return ans;
 }
 
-//prints
-void bigint::printB() {
-	if (length == 0) cout << 0;
-	int i;
-	for (i = length - 1; i > -1; i++) {
-		cout << digits[i];
-	}
-}
-
 
 //constructor
-bigint::bigint() {}
+bigint::bigint(void) {
+	digits.resize(1);
+	digits[0] = 0;
+	sign = 1;
+	length = 0;
+}
 
 bigint::bigint(int nr) {
 	digits.resize(1);
@@ -82,25 +77,51 @@ bigint::bigint(int nr) {
 	length = 1 - (nr == 0);
 }
 
+bigint::bigint(const bigint & obj)  {
+	length = obj.length;
+	sign = obj.sign;
+	digits = obj.digits;
+}
+
+bigint::~bigint() {}
+
 //more operations: symm and overloading of other operators
 
-bigint bigint::symmB() const {
-	bigint ans;
-	ans = (*this);
+
+
+void bigint::operator= (bigint test){
+	length = test.length;
+	sign = test.sign;
+	digits = test.digits;
+}
+
+
+//prints
+void bigint::printB(int b = BASE) {
+	if (length == 0) cout << 0;
+	int i;
+	cout << digits.back();
+	for (i = length - 2; i > -1; i--) {
+		cout << '|';
+		cout << digits[i];
+	}
+}
+
+bigint bigint::symmB()  {
+	bigint ans(*this);
 	if (length > 0) {
 		ans.length *= -1;
 	}
 	return ans;
 }
 
-bigint bigint::absB() const {
-	bigint ans;
-	ans = (*this);
+bigint bigint::absB()  {
+	bigint ans(*this);
 	ans.sign = 1;
 	return ans;
 }
 
-bool bigint::operator== (const bigint& test) {
+bool bigint::operator== ( bigint test) {
 	if (sign != test.sign) return false;
 	else if (length	!= test.length) return false;
 	else {
@@ -113,7 +134,7 @@ bool bigint::operator== (const bigint& test) {
 }
 
 // YOU MIGHT WANT TO REPLACE THE INTS IN THE "FOR LOOPS" BY ITERATORS
-bool bigint::isbiggerabsB(const bigint & test) const {
+bool bigint::isbiggerabsB( bigint test)  {
 	if (length == 0) return false;
 	else if (length > test.length) return true;
 	else if (length < test.length) return false;
@@ -127,21 +148,22 @@ bool bigint::isbiggerabsB(const bigint & test) const {
 	return false;	
 }
 
-bool bigint::operator< (const bigint & test) {
+bool bigint::operator< ( bigint test) {
 	if (sign < test.sign) return true;
 	else if (sign > test.sign) return false;
 	else return test.isbiggerabsB(*this);
 }
 
-bool bigint::operator> (const bigint & test) {
+bool bigint::operator> ( bigint test) {
 	if (sign > test.sign) return true;
 	else if (sign < test.sign) return false;
 	else return (*this).isbiggerabsB(test);
 }
 
 
-//next operator: sum
-bigint bigint::sumabsB(const bigint& test) const {
+//next operator: sum 
+
+bigint bigint::sumabsB( bigint test)  {
 	if (length == 0) return test.absB();
 	else { //maybe use iterators
 		int i, l = max(length, test.length);
@@ -166,7 +188,7 @@ bigint bigint::sumabsB(const bigint& test) const {
 	}
 }
 
-bigint bigint::diffabsB(const bigint& test) const {//*this* is the largest in abs
+bigint bigint::diffabsB( bigint test)  {//*this* is the largest in abs
 	if (length == 0) return zeroB();
 	else {
 		int i, l = max(length, test.length); //it's length
@@ -194,7 +216,9 @@ bigint bigint::diffabsB(const bigint& test) const {//*this* is the largest in ab
 	}
 }
 
-bigint bigint::operator+ (const bigint& test) {
+
+
+bigint bigint::operator+ ( bigint test) {
 	if (length == 0) return test;
 	
 	bigint ans;
@@ -213,11 +237,11 @@ bigint bigint::operator+ (const bigint& test) {
 	return ans;
 }
 
-bigint bigint::operator- (const bigint& test) {
+bigint bigint::operator- ( bigint test) {
 	return (*this) + test.symmB();
 }
 
-bigint bigint::operator* (const bigint& test) {
+bigint bigint::operator* ( bigint test) {
 	if (length == 0 || test.length == 0) return zeroB();
 
 	bigint ans;
@@ -243,8 +267,8 @@ bigint bigint::operator* (const bigint& test) {
 	return ans;	
 }
 
+
+
 //YOU CAN IMPLEMENT KARATSUBA ALGORITHM although I don't know if there would be advantages for my implementation
 
 //TESTING REQUIRED
-
-//notes: fix print (add 0's)

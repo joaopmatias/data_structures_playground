@@ -1,6 +1,7 @@
 #include "biginteger.h"
 
 int main(){
-    cout << "oi" << endl;
+    bigint t(700), s(100);
+    (s*t + s).printB();
     return 0;
 }
