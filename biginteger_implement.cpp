@@ -1,7 +1,10 @@
 #include "biginteger.h"
 
 int main(){
-    bigint t(700), s(100);
-    (s*t + s).printB();
+    int i, N;
+    bigint ans(1);
+    cin >> N;
+    for(i = 1; i <= N; i++) ans = ans * (bigint(i));
+    ans.printB();
     return 0;
 }

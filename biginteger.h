@@ -8,7 +8,7 @@
 
 using namespace std;
 
-int BASE = 65536; 
+int BASE = 1024; //at  most 1250 (beacuse we may need to cube)
 
 class bigint {
 
@@ -23,16 +23,19 @@ bigint(int nr);
 bigint(const bigint & obj) ;
 ~bigint();
 
+//in order to simplify printing, all operations should have base as an argument which is BASE by default OR
+//define multiplication twice
+//define sumabsB twice, in both of these use only vectors, not bigint
 void operator= (bigint);
 void printB(int);
 bigint symmB(void) ;
 bigint absB(void) ;
 bool operator== ( bigint );
 bool isbiggerabsB ( bigint) ;
-bool operator< ( bigint );
-bool operator> ( bigint );
 bigint sumabsB ( bigint ) ;
 bigint diffabsB ( bigint ) ;
+bool operator< ( bigint );
+bool operator> ( bigint );
 bigint operator+ ( bigint );
 bigint operator- ( bigint );
 bigint operator* ( bigint );
@@ -61,6 +64,57 @@ bigint zeroB(){
 	return ans;
 }
 
+//int to vector with base
+vector<int> inttobase(int nr, int base){
+	vector<int> ans;
+	int t;
+	ans.push_back(nr % base);
+	t = nr / base;
+	while(t > 0){
+		ans.push_back(t % base);
+		t /= base;
+	}
+	return ans;
+}
+
+//sumabs vectors with base
+vector<int> sumbase(vector<int> digits1, vector<int> digits2, int base){
+	int i, l1 = digits1.size(), l2 = digits2.size(), l = max(l1, l2);
+	vector<int> write_nr (l + 1, 0);
+	for (i = 0; i < l1; i++) {
+		write_nr[i] = digits1[i];
+	}
+	for (i = 0; i < l2; i++) {
+		write_nr[i] += digits2[i];
+		if (write_nr[i] >= base) {
+			write_nr[i] -= base;
+			write_nr[i + 1]++;
+		}
+	}
+	if (write_nr.back() == 0 ) write_nr.pop_back();
+	
+	return write_nr;
+}
+
+//multiplication vectors with base
+vector<int> prodbase(vector<int> digits1, vector<int> digits2, int base){
+	int l1 = digits1.size(), l2 = digits2.size();
+	vector<int> write_nr (l1 + l2 + 1, 0);
+	int i, j, k, l;
+	l = write_nr.size() - 1;
+	for (i = 0; i < l1; i++) {
+		for (j = 0; j < l2; j++) {
+			write_nr[i + j] += digits1[i] * digits2[j];
+		}
+		for (j = i; j < l; j++) {
+			write_nr[i + 1] += (write_nr[i]/base);
+			write_nr[i] = write_nr[i]%base;
+		}
+	}
+	write_nr.pop_back();
+	if (write_nr.back() == 0) write_nr.pop_back();
+	return write_nr;	
+}
 
 //constructor
 bigint::bigint(void) {
@@ -97,13 +151,40 @@ void bigint::operator= (bigint test){
 
 
 //prints
-void bigint::printB(int b = BASE) {
+void bigint::printB(int base = 1000) {
 	if (length == 0) cout << 0;
 	int i;
-	cout << digits.back();
-	for (i = length - 2; i > -1; i--) {
-		cout << '|';
-		cout << digits[i];
+	if(sign == -1) cout << '-';
+	if(base == BASE){
+		cout << digits.back();
+		for (i = length - 2; i > -1; i--) {
+			cout << '|';
+			cout << digits[i];
+		}
+		return ;
+	}
+	vector<int> old_base, npow, ans, ii;
+	old_base = inttobase(BASE, base);
+	npow.push_back(1);
+	ans = inttobase(digits[0], base);
+	for(i = 1; i < length; i++){
+		npow = prodbase(npow, old_base, base);
+		ii = prodbase(npow, inttobase(digits[i], base), base);
+		ans = sumbase(ans, ii, base);
+	}
+	cout << ans.back();
+	if(base == 1000){
+		for (i = ans.size() - 2; i > -1; i--) {
+			printf("%03d", ans[i]);
+		}
+		return ;
+	}
+	else {
+		for (i = ans.size() - 2; i > -1; i--) {
+			cout << '|';
+			cout << ans[i];
+		}
+		return ;
 	}
 }
 
