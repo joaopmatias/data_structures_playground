@@ -8,7 +8,7 @@
 
 using namespace std;
 
-int BASE = 1024; //at  most 1250 (beacuse we may need to cube)
+int BASE = 1024; //at  most 1250 (beacuse we may need to cube in division)
 
 class bigint {
 
@@ -125,8 +125,7 @@ bigint::bigint(void) {
 }
 
 bigint::bigint(int nr) {
-	digits.resize(1);
-	digits[0] = nr;
+	digits = inttobase(abs(nr), BASE);
 	sign = 1 - 2 * (nr < 0);
 	length = 1 - (nr == 0);
 }
