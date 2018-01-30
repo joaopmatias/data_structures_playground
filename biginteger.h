@@ -11,6 +11,9 @@ using namespace std;
 int BASE = 1024; //at  most 1250 (beacuse we may need to cube in division)
 
 class bigint {
+private:
+
+
 
 public:
 
@@ -28,9 +31,7 @@ void printB(int);
 bigint symmB(void) ;
 bigint absB(void) ;
 bool operator== ( bigint );
-bool isbiggerabsB ( bigint, int) ;
-bigint sumabsB ( bigint ) ;
-bigint diffabsB ( bigint, int ) ;
+//private functions
 bool operator< ( bigint );
 bool operator> ( bigint );
 bigint operator+ ( bigint );
@@ -38,6 +39,11 @@ bigint operator- ( bigint );
 bigint operator* ( bigint );
 bigint operator/ ( bigint );
 bigint operator% ( bigint );
+
+private:
+bool isbiggerabsB ( bigint, int) ;
+bigint sumabsB ( bigint ) ;
+bigint diffabsB ( bigint, int ) ;
 }; 
 
 //int to vector with base
