@@ -23,9 +23,6 @@ bigint(int nr);
 bigint(const bigint & obj) ;
 ~bigint();
 
-//in order to simplify printing, all operations should have base as an argument which is BASE by default OR
-//define multiplication twice
-//define sumabsB twice, in both of these use only vectors, not bigint
 void operator= (bigint);
 void printB(int);
 bigint symmB(void) ;
@@ -430,4 +427,3 @@ bigint bigint::operator% (bigint test) {
 
 //YOU CAN IMPLEMENT KARATSUBA ALGORITHM although I don't know if there would be advantages for my implementation
 
-//TESTING REQUIRED
