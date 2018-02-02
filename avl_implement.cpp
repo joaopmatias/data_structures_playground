@@ -3,7 +3,7 @@
 using namespace std;
 
 int main(){
-    node * root;
+    node * root, * hi;
     root = newnode(0);
     root = insertin(root, 6);
     root = insertin(root, 3);
@@ -21,6 +21,13 @@ int main(){
     root = insertin(root, 4);
     printnode(root);
     erasin(root, 4);
+    printnode(root);
+    erasin(root, 4);
+    printnode(root);
+    hi = root -> right -> right;
+    cout << endl << hi -> value;
+    deletetree(root);
+    cout << endl << hi -> value;
     cout << endl;
     return 0;
 }

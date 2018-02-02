@@ -118,7 +118,6 @@ node * extremeleft(node * root){
     return t;
 }
 
-/* THIS THING IS DIFFICULT TO FIX...
 int erasin(node * root, int value){
     node * u, * v = root, * replace, *t;
     if(root == nullptr) return 0;
@@ -129,17 +128,15 @@ int erasin(node * root, int value){
         else v = nullptr;
     }
     if(value != u -> value) return 0; 
-    else if(u -> right == nullptr && u -> left == nullptr && u -> parent == nullptr){
-        delete u;
-        root = nullptr;
-        return 1;
-    }
     else if(u -> right == nullptr && u -> left == nullptr){
         t = u -> parent;
-        if(value < t -> value) t -> left = nullptr;
-        else t -> right = nullptr;
+        replace = nullptr;
+        if(t != nullptr){
+            if(value < t -> value) t-> left = nullptr;
+            else t -> right = nullptr;
+        }
     }
-    if(u -> right == nullptr){
+    else if(u -> right == nullptr){
         replace = u -> left;
         t = replace;
     }
@@ -150,20 +147,21 @@ int erasin(node * root, int value){
     }
     else {
         replace = extremeleft(u -> right);
-        replace -> left = u -> left;
-        replace -> right = u -> right;
         t = replace -> parent;
-        t -> left = nullptr;
+        t -> left = replace -> right;
+        replace -> right = u -> right;
+        replace -> left = u -> left;
     }
-    replace -> parent = u -> parent;
-    if(replace -> right != nullptr) replace -> right -> parent = replace;
-    if(replace -> left != nullptr) replace -> left -> parent = replace;
+    if(replace != nullptr){
+        replace -> parent = u -> parent;
+        if(replace -> right != nullptr) replace -> right -> parent = replace;
+        if(replace -> left != nullptr) replace -> left -> parent = replace;
+    }
     delete u;
     t = balanceup(t);
     root = t;
     return 1;
 }
-*/
 
 void printnode(node * root){
     int i, j, k, l, n;
@@ -199,4 +197,26 @@ void printnrec(node * root){
         if(root-> right != nullptr) cout << endl;
         printnrec(root -> right);
     }
+}
+
+void deletetree(node * root){
+    int i, j, k, l, n;
+    vector<node *> queue;
+    node * current;
+    if(root == nullptr) return ;
+    queue.push_back(root);
+    while(!queue.empty()){
+        while(queue.back() -> left != nullptr) queue.push_back(queue.back() -> left);
+        while(!queue.empty() && queue.back() -> right == nullptr){
+            delete queue.back();
+            queue.pop_back();
+        }
+        if(!queue.empty()) {
+            current = queue.back();
+            queue.pop_back();
+            queue.push_back(current -> right);
+            delete current;
+        }
+    }
+    return ;
 }
