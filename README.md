@@ -1,1 +1,3 @@
-Collection of useful pieces of code and algorithms.
+#Playground
+
+Implementations of some data structures.
