@@ -15,7 +15,6 @@ using namespace std;
  the array is preprocessed and partial sums of
  array elements are stored in BITree[]. */
 
-//What is the initial proccess algorithm!!!???
 
 int getSum(int BITree[], int index)
 {
